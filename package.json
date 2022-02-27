@@ -1,0 +1,25 @@
+{
+  "name": "grafica",
+  "version": "1.0.0",
+  "description": "Sistema de Produtos da Gráfica",
+  "main": "app.js",
+  "scripts": {
+    "test": "node app.js",
+    "start": "node app.js"
+  },
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "axios": "^0.26.0",
+    "axios-cookiejar-support": "^2.0.3",
+    "body-parser": "^1.19.0",
+    "cookie-parser": "^1.4.6",
+    "express": "^4.17.3",
+    "pg": "^8.7.1",
+    "pug": "^3.0.2",
+    "tough-cookie": "^4.0.0"
+  },
+  "devDependencies": {
+    "nodemon": "^2.0.15"
+  }
+}

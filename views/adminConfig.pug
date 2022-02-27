@@ -1,0 +1,86 @@
+html
+  head
+    title titulo
+    meta(charset="utf-8")
+    link(rel="stylesheet" href="styles/style.css")
+  body
+
+    form(method="GET" action="inserir" class="newregistration")
+      input(type="text" name="name" placeholder="nome do produto")
+      input(type="text" name="category" placeholder="Categoria")
+      label(for="m2") Produto por M²
+      input(type="checkbox" id="m2" name="metroquadrado" value="true")
+      input(type="text" name="price" placeholder="Preço do Produto")
+      input(type="text" name="amount" placeholder="Quantidade")
+      input(type="text" name="cost" placeholder="Custo")
+      textarea(name="description" placeholder="Descrição do produto")
+      input(type="submit" value="enviar")
+
+    ul.products
+      li.listproducts 
+          ul.groupitensproducts.legend
+            li.itemproduct.id Cod
+            li.itemproduct.m2 M²
+            li.itemproduct.name Nome do produto
+            li.itemproduct.desc Descrição
+            li.itemproduct.category Categoria
+      each val, index in produto
+        li.listproducts 
+          ul.groupitensproducts
+            li.itemproduct.id(title=val.idproduto)= val.idproduto
+            li.itemproduct.m2
+              if(val.metroquadrado)
+                input(type="checkbox" name="metroquadrado" checked disabled)
+              else
+                input(type="checkbox" name="metroquadrado" disabled)
+            li.itemproduct.name(title=val.nomeproduto)= val.nomeproduto
+            li.itemproduct.desc(title=val.descicaoproduto)= val.descicaoproduto
+            li.itemproduct.category(title=val.categoriaproduto)= val.categoriaproduto
+            li.delete
+              a(href="/delete/"+val.idproduto) x
+            
+            each k, v in val.valores
+              .valoritem
+                form(method="POST" action="/updatevalues")
+                  input(type="submit" value="Editar").editvalue
+                  input(type="hidden" name="idvalue" value=k.idvalor)
+                  input(type="text" placeholder="valor" name="valor" value=k.preco)
+                  input(type="text" placeholder="quantidade" name="quantidade" value=k.quantidade)
+                  input(type="text" placeholder="custo" name="custo" value=k.custo)
+                  span.delete
+                    a(href="/deletevalues/"+k.idvalor) x
+            .valoritem
+              form(method="POST" class="inative" action="/insertvalues")
+                input(type="submit" value="Novo").addvalue
+                input(type="hidden" name="idproduct" value=val.idproduto)
+                input(type="text" name="valor" placeholder="valor" value="")
+                input(type="text" name="quantidade" placeholder="quantidade" value="")
+                input(type="text" name="custo" placeholder="custo" value="")
+                span.delete
+                  a(href="#") x
+
+    ul.filter
+      li 
+        h3 categoria
+      li.category
+        a(href="/filter/xerox") xerox
+      //- for item in items
+      //-   li= item.nomeproduto
+
+
+//- "produtos"
+//- idproduto
+//- nomeproduto
+//- descproduto
+//- categoria
+//- unidade 
+
+//- unidade for 0 (false) indica que o produto é vendido por unidade (formulário mostra input number)
+//- se for 1 (true) o campo quantidade vai ser padrão (select ou um + e -)
+
+//- "valores"
+//- idvalor
+//- idproduto
+//- quantidade
+//- preco
+//- custo
