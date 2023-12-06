@@ -1,0 +1,239 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title><%=produto.nome%></title>
+  <link rel="stylesheet" href="/styles/style.css">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Raleway:wght@200;400;700&family=Roboto+Mono:wght@200;400;700&display=swap" rel="stylesheet">
+
+  
+</head>
+<body>
+  <nav class="nav-main">
+    <img src="/images/logo-devgraphic.png" alt="logo devgraphic" class="logo">
+  </nav>
+  <header class="banner">
+    <h1 class="title-banner"><%=produto.nome%></h1>
+  </header>
+  <section class="products">
+    <div class="layer inactive" id="layer1">
+      <div class="indice">1</div>
+      <div class="content-orcamento">
+        <h3>Escolha um material</h3>
+        <div class="group-itens-block">
+          <div class="block-item">material 0,0g</div>
+        </div>
+      </div>
+    </div>
+    <div class="layer inactive" id="layer2">
+      <div class="indice">2</div>
+      <div class="content-orcamento">
+        <h3>Selecione o tamanho</h3>
+        <div class="group-itens-block">
+          <div class="block-item">0x0cm final</div>
+        </div>
+      </div>
+    </div>
+    <div class="layer inactive" id="layer3">
+      <div class="indice">3</div>
+      <div class="content-orcamento">
+        <h3>Configure as cores</h3>
+        <div class="group-itens-block">
+          <div class="block-item">0x0</div>
+        </div>
+      </div>
+    </div>
+    <div class="layer inactive" id="layer4">
+      <div class="indice">4</div>
+      <div class="content-orcamento">
+        <h3>Agora o acabamento</h3>
+        <div class="group-itens-block">
+          <div class="block-item">Acabamento 1</div>
+          <div class="block-item">Acabamento 2</div>
+        </div>
+      </div>
+    </div>
+    <div class="layer inactive" id="layer5">
+      <div class="indice">5</div>
+      <div class="content-orcamento">
+        <h3>Vamos finalizar escolhendo a quantidade</h3>
+        <div class="group-itens-block">
+          <div class="detalhes">
+            <p>Couché 300g</p>
+            <p>8,8x4,8 cm final</p>
+            <p>4x4 frente e verso</p>
+          </div>
+          <div class="quantidade">
+            <div class="block-item">
+              <span class="qtd" id="qtd" min="500" index="1">500</span>
+              <span class="plus" onclick="selectValue('mais')">+</span>
+              <span class="minus" onclick="selectValue('menos')">-</span>
+            </div>
+          </div>
+          <div class="block-valor">
+            <div class="valor-final">
+              <h4>R$</h4>
+              <h2 id="preco">0,00</h2>
+            </div>
+            <button class="button-finish">Finalizar</button>
+            <p>Fornecedor</p>
+          </div>
+          <div class="block-valor">
+            <div class="valor-final">
+              <h4>R$</h4>
+              <h2 id="venda">0,00</h2>
+            </div>
+            <button class="button-finish">Finalizar</button>
+            <p>Venda</p>
+          </div>
+          <div class="block-valor">
+            <div class="valor-final">
+              <h4>R$</h4>
+              <h2 id="comissao">0,00</h2>
+            </div>
+            <button class="button-finish">Finalizar</button>
+            <p>Comissao</p>
+          </div>
+          <div class="block-valor">
+            <div class="valor-final">
+              <h4>R$</h4>
+              <h2 id="lucro">0,00</h2>
+            </div>
+            <button class="button-finish">Finalizar</button>
+            <p>Lucro</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section> 
+  <footer class="banner">
+    <h1 class="title-banner">Rodapé</h1>
+  </footer>
+  <script src="/scripts/scriptValue.js"></script>
+  <script>
+    const product = `<%- JSON.stringify(produto) %>`
+
+    const selectValue = (param) => {
+      const valorFornecedorFinal = document.getElementById('preco');
+      const valorVendaFinal = document.getElementById('venda');
+      const valorComissaoFinal = document.getElementById('comissao');
+      const lucroFinal = document.getElementById('lucro');
+      const fieldQuantidade = document.getElementById('qtd');
+      const mutiple = parseInt(fieldQuantidade.getAttribute('min'));
+      let index = parseInt(fieldQuantidade.getAttribute('index'));
+      let qtdSelected;
+
+      if(param === 'mais')
+        index++;
+      else if(param === 'menos' && index > 1)
+        index--;
+      
+      qtdSelected = mutiple * index;
+      fieldQuantidade.setAttribute('index', index);
+      fieldQuantidade.innerHTML = qtdSelected;
+
+      const calcularValores = calcularPreco(qtdSelected);
+
+      valorFornecedorFinal.innerHTML = calcularValores.fornecedor
+      valorVendaFinal.innerHTML = calcularValores.venda;
+      valorComissaoFinal.innerHTML = calcularValores.comissao;
+      lucroFinal.innerHTML = calcularValores.lucro;
+    }
+
+
+
+
+    const showedLayer = (n, resp, eventoName) => {
+      const layer = document.getElementById(`layer${n}`);
+      layer.classList.remove('inactive');
+      
+      if(resp){
+        const elementsInsert = resp.map(item => {
+          return `<div class='block-item' onclick='${eventoName}(${item.id})'>${item.nome}</div>`;
+        }).join('');
+        layer.querySelector('.group-itens-block').innerHTML = elementsInsert;
+      }
+    }
+
+
+
+    const getMaterial = async () => {
+      const url = `/products/<%= produto.produto %>`;
+      const {cookies, data} = await fetch(url).then(res => res.json());
+      showedLayer(1, data, 'getTamanho');
+      saveLocalstorage(cookies);
+    }
+
+    const getTamanho = async (opt) => {
+      const cookie = window.localStorage.getItem('cookie');
+      const url = `/material/cartao-de-visita/${opt}/%2F${cookie}`;
+      const {data} = await fetch(url).then(res => res.json());
+      showedLayer(2, data, 'getColors');
+    }
+
+    const getColors = async (opt) => {
+      const cookie = window.localStorage.getItem('cookie');
+      const url = `/tamanho/cartao-de-visita/${opt}/%2F${cookie}`;
+      const {data} = await fetch(url).then(res => res.json());
+      showedLayer(3, data, 'getAcabamento');
+    }
+
+    const getAcabamento = async (opt) => {
+      const cookie = window.localStorage.getItem('cookie');
+      const url = `/cores/cartao-de-visita/${opt}/%2F${cookie}`;
+      const {data} = await fetch(url).then(res => res.json());
+      showedLayer(4, data, 'getValores');
+    }
+
+    const getValores = async (opt) => {
+      const cookie = window.localStorage.getItem('cookie');
+      const url = `/acabamento/cartao-de-visita/${opt}/%2F${cookie}`;
+      const {data} = await fetch(url).then(res => res.json());
+      finalyResponse = data;
+      showedLayer(5, null);
+      prepareValores(data);
+    }
+
+    const prepareValores = (item) => {
+      
+      const preco = document.getElementById("preco");
+      const venda = document.getElementById('venda');
+      const comissao = document.getElementById('comissao');
+      const lucro = document.getElementById('lucro');
+      const qtdd = document.getElementById("qtd");
+
+      const precoFornecedor = parseFloat(item.preco_min);
+      const precoVenda = precoFornecedor+(precoFornecedor*item.valorVendaComissaoMin['venda']/100);
+      const precoRevenda = precoVenda*item.valorVendaComissaoMin['comissao']/100;
+      const lucroVenda = precoVenda-(precoRevenda+precoFornecedor);
+
+      preco.innerHTML = parseFloat(precoFornecedor).toFixed(2).toString().replace(".", ",");
+      venda.innerHTML = parseFloat(precoVenda).toFixed(2).toString().replace(".", ",");
+      comissao.innerHTML = parseFloat(precoRevenda).toFixed(2).toString().replace(".", ",");
+      lucro.innerHTML = parseFloat(lucroVenda).toFixed(2).toString().replace(".", ",");
+      qtdd.setAttribute('index', 1);
+      qtdd.setAttribute('min', item.qtd);
+      qtdd.innerHTML = item.qtd;
+    }
+
+
+    const saveLocalstorage = (cookie) => {
+      const getCookie = window.localStorage.getItem('cookie');
+      if(getCookie == null || cookie != getCookie){
+        window.localStorage.setItem('cookie', cookie)
+      }
+    }
+
+    getMaterial();
+    // prepareValores(finalyResponse);
+
+  </script>
+</body>
+</html>
+
+
+

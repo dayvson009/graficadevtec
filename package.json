@@ -3,6 +3,7 @@
   "version": "1.0.0",
   "description": "Sistema de Produtos da Gráfica",
   "main": "app.js",
+  "type": "module",
   "scripts": {
     "test": "node app.js",
     "start": "node app.js"
@@ -14,6 +15,8 @@
     "axios-cookiejar-support": "^2.0.3",
     "body-parser": "^1.19.0",
     "cookie-parser": "^1.4.6",
+    "cors": "^2.8.5",
+    "ejs": "^3.1.9",
     "express": "^4.17.3",
     "pg": "^8.7.1",
     "pug": "^3.0.2",
