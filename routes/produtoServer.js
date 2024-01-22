@@ -17,5 +17,7 @@ router.get('/acabamento/:nameProduct/:finishingId/:cookie', products.getPricePro
 
 router.get('/combinacoes/:nameProduct', products.getCombinacoes)
 
+router.get('/pegaritens/:pagina', products.getPageItens)
+
 
 export default router;

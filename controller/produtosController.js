@@ -1,5 +1,6 @@
 import products from '../model/products.js';
 import axios from 'axios';
+import * as cheerio from 'cheerio';
 
 const filterProduct = (prod) => products.filter(item => item.produto == prod)[0]
 
@@ -209,3 +210,53 @@ function gerarCombinacoes(etapas) {
 
   return combinacoes;
 }
+
+export const getPageItens = async (req, res) => {
+  
+  const {pagina} = req.params;
+  
+  const url = `https://www.imprimapormenos.com.br/produtos/${pagina}`;
+
+  axios.get(url)
+  .then(response => {
+    if (response.status === 200) {
+      const html = response.data;
+      const $ = cheerio.load(html);
+
+      const titleProduct = $('.titProdutosInterna').text();
+      
+      const etapas = {
+        produto: pagina,
+        nome: titleProduct,
+        tipo: 'server',
+        image: `${pagina}.png`
+      };
+
+      const detalhesMaterial = {}
+      const ordem = ['material', 'tamanho', 'cores', 'acabamento' ];
+      
+      const element = $('.listaProdutos2');
+
+      element.each((index, el) => {
+        const etapa = $(el).find('.buttom-box').children('a');
+        detalhesMaterial[ordem[index]] = []
+        etapa.each((i, item) => {
+          detalhesMaterial[ordem[index]].push({nome: $(item).text(), id: $(item).attr('id')})
+        });
+      });
+
+      const combinacoes = gerarCombinacoes(detalhesMaterial)
+      console.log(combinacoes)
+      console.log(detalhesMaterial)
+      console.log('ETAPAS:', etapas);
+
+      res.json({...etapas, ...detalhesMaterial, valor: combinacoes})
+
+    } else {
+      console.log('Erro ao acessar a página:', response.status);
+    }
+  })
+  .catch(error => {
+    console.error('Erro na solicitação:', error.message);
+  });
+};

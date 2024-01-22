@@ -21,46 +21,13 @@
   <section class="products">
     <h2 class="title-main">Escolha seu melhor produto</h2>
     <div class="all-products">
-      <a href="/produtos/cartao-de-visita" class="item-product">
-        <figure style="background-image: url('/images/produtos/cartaodevisita.png');"></figure>
-        <h3 class="title-product">Cartão de visita</h3>
-      </a>
-      <a href="/produtos/cartao-de-visita" class="item-product">
-        <figure style="background-image: url('/images/produtos/panfleto-flyer.png');"></figure>
-        <h3 class="title-product">Flyer / Panfleto</h3>
-      </a>
-      <a href="/produtos/cartao-de-visita" class="item-product">
-        <figure style="background-image: url('/images/produtos/tag.png');"></figure>
-        <h3 class="title-product">Tag</h3>
-      </a>
-      <a href="/produtos/cartao-de-visita" class="item-product">
-        <figure style="background-image: url('/images/produtos/envelope.png');"></figure>
-        <h3 class="title-product">Envelope saco para A4 aberto</h3>
-      </a>
-      <a href="/produtos/cartao-de-visita" class="item-product">
-        <figure style="background-image: url('/images/produtos/folder.png');"></figure>
-        <h3 class="title-product">Folder</h3>
-      </a>
-      <a href="/produtos/cartao-de-visita" class="item-product">
-        <figure style="background-image: url('/images/produtos/calendario-mesa.png');"></figure>
-        <h3 class="title-product">Calendário de mesa</h3>
-      </a>
-      <a href="/produtos/cartao-de-visita" class="item-product">
-        <figure style="background-image: url('/images/produtos/calendario.png');"></figure>
-        <h3 class="title-product">Calendário de parede</h3>
-      </a>
-      <a href="/produtos/cartao-de-visita" class="item-product">
-        <figure style="background-image: url('/images/produtos/timbrado.png');"></figure>
-        <h3 class="title-product">Papel timbrado</h3>
-      </a>
-      <a href="/produtos/cartao-de-visita" class="item-product">
-        <figure style="background-image: url('/images/produtos/pasta.png');"></figure>
-        <h3 class="title-product">Pasta</h3>
-      </a>
-      <a href="/produtos/cartao-de-visita" class="item-product">
-        <figure style="background-image: url('/images/produtos/toten-dobravel.png');"></figure>
-        <h3 class="title-product">Toten dobrável</h3>
-      </a>
+      <% products.forEach(item => { %>
+        <a href="/produtos/<%=item.produto%>" class="item-product">
+          <figure style="background-image: url('/images/produtos/<%=item.image%>');"></figure>
+          <h3 class="title-product"><%= item.nome%></h3>
+        </a>
+       
+      <% }); %>
     </div>
   </section>  
   <footer class="banner">

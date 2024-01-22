@@ -4,7 +4,7 @@ import products from '../model/products.js';
 const router = Router()
 
 router.get('/produtos', (req, res) => {
-  res.render('produtos', {});
+  res.render('produtos', {products});
 })
 
 router.get('/produtos/:produto', (req, res) => {

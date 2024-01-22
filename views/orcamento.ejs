@@ -170,28 +170,28 @@
 
     const getTamanho = async (opt) => {
       const cookie = window.localStorage.getItem('cookie');
-      const url = `/material/cartao-de-visita/${opt}/%2F${cookie}`;
+      const url = `/material/<%= produto.produto %>/${opt}/%2F${cookie}`;
       const {data} = await fetch(url).then(res => res.json());
       showedLayer(2, data, 'getColors');
     }
 
     const getColors = async (opt) => {
       const cookie = window.localStorage.getItem('cookie');
-      const url = `/tamanho/cartao-de-visita/${opt}/%2F${cookie}`;
+      const url = `/tamanho/<%= produto.produto %>/${opt}/%2F${cookie}`;
       const {data} = await fetch(url).then(res => res.json());
       showedLayer(3, data, 'getAcabamento');
     }
 
     const getAcabamento = async (opt) => {
       const cookie = window.localStorage.getItem('cookie');
-      const url = `/cores/cartao-de-visita/${opt}/%2F${cookie}`;
+      const url = `/cores/<%= produto.produto %>/${opt}/%2F${cookie}`;
       const {data} = await fetch(url).then(res => res.json());
       showedLayer(4, data, 'getValores');
     }
 
     const getValores = async (opt) => {
       const cookie = window.localStorage.getItem('cookie');
-      const url = `/acabamento/cartao-de-visita/${opt}/%2F${cookie}`;
+      const url = `/acabamento/<%= produto.produto %>/${opt}/%2F${cookie}`;
       const {data} = await fetch(url).then(res => res.json());
       finalyResponse = data;
       showedLayer(5, null);
